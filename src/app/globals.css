@@ -1,0 +1,40 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #0f172a;
+  --health-green: #10b981;
+  --health-green-light: #ecfdf5;
+  --health-dark-blue: #0f172a;
+  --text-gray: #64748b;
+  --card-white: #ffffff;
+  --scanner-purple: #2a1c40;
+  --scanner-purple-light: #4a3469;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-health-green: var(--health-green);
+  --color-health-green-light: var(--health-green-light);
+  --color-health-dark-blue: var(--health-dark-blue);
+  --color-text-gray: var(--text-gray);
+  --color-card-white: var(--card-white);
+  --color-scanner-purple: var(--scanner-purple);
+  --color-scanner-purple-light: var(--scanner-purple-light);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), system-ui, -apple-system, sans-serif;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
