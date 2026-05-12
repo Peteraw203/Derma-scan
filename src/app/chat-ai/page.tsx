@@ -15,7 +15,7 @@ export default function ChatScreen() {
     {
       id: "welcome",
       role: "bot",
-      content: "Hello! I am your AI assistant for oral health. How can I help you today?",
+      content: "Halo! Saya adalah asisten AI Derma-Scan. Saya siap membantu Anda dengan informasi mengenai kesehatan kulit, jerawat, hingga deteksi dini kanker kulit. Ada yang bisa saya bantu?",
     },
   ]);
   const [input, setInput] = useState("");
@@ -73,7 +73,7 @@ export default function ChatScreen() {
             <Bot className="w-6 h-6 text-health-green" />
           </div>
           <div>
-            <h1 className="text-base font-bold text-health-dark-blue">Oral-Cance AI</h1>
+            <h1 className="text-base font-bold text-health-dark-blue">Derma-Scan AI</h1>
             <p className="text-xs text-text-gray">Always active</p>
           </div>
         </div>
@@ -112,7 +112,7 @@ export default function ChatScreen() {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleSend()}
-            placeholder="Type a message..."
+            placeholder="Tanyakan tentang kesehatan kulit..."
             className="flex-1 bg-gray-50 border border-gray-200 rounded-full px-5 py-3 text-sm focus:outline-none focus:border-health-green"
           />
           <button 
