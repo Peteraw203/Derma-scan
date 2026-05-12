@@ -1,36 +1,87 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🌟 DermaScan - AI-Powered Skin Cancer Detection 🩺
+**A submission for Google JuaraGCP / Juara Coding Vibes Competition**
 
-## Getting Started
+DermaScan is an advanced, AI-driven healthcare web application designed to help users detect potential skin cancer risks early, consult with an intelligent medical AI assistant, and locate the nearest dermatology clinics with seamless IoT integration (upcoming). 
 
-First, run the development server:
+Built to demonstrate the power of the modern Google tech ecosystem!
 
+---
+
+## 🚀 Features
+
+### 1. 🔍 YOLO Skin Cancer Scanner (Real-time Vision AI)
+Upload an image or use your device's camera (via WebRTC) to instantly scan skin lesions. Powered by a custom **YOLOv12** computer vision model hosted on **Google Cloud Run**, it detects:
+- 🔴 `Basal Cell Carcinoma`
+- 🔴 `Melanoma`
+- 🔴 `Squamous Cell Carcinoma`
+
+It instantly provides *Bounding Box* visual feedback and confidence scores right on the browser!
+
+### 2. 🤖 AI Consultant (Powered by Gemini)
+Got questions about your skin health? Our interactive AI consultant uses **Google Gemini (AI Studio)** to analyze your symptoms, provide contextual medical advice, and guide you on what steps to take next. It acts as an intelligent, empathetic first point of contact.
+
+### 3. 🗺️ Smart Clinic Locator (Google Maps)
+If a risk is detected, DermaScan immediately helps you take action. Integrated directly with **Google Maps Platform (Places API & Routes API)**, the application automatically maps out the nearest specialized clinics, displaying accurate ratings, distance, and live driving routes.
+
+### 4. ⌚ IoT Integration (Work In Progress 🚧)
+We are actively developing a custom IoT hardware module powered by the **ESP32-C3 Super Mini** microcontroller and a **TCS Color Sensor**. 
+- **Mechanism:** The sensor captures the baseline RGB color of healthy skin and compares it against the RGB values of the targeted skin lesion/wound. This comparative color analysis helps determine the severity and potential risk of the lesion.
+- **Secure Communication:** Data is transmitted to our cloud backend via the **MQTT** protocol, securely encrypted end-to-end using the lightweight **ASCON** cryptographic algorithm to ensure patient data privacy.
+
+---
+
+## 💻 Technology Stack
+
+This project was crafted to fully utilize the Google Cloud and AI ecosystem, seamlessly blended with modern web development frameworks.
+
+**Frontend:**
+- **Next.js 14** (App Router)
+- **TypeScript** & **Tailwind CSS**
+- **Lucide React** (Icons)
+
+**Backend & AI:**
+- **Google Cloud Run** (Serverless container deployment for ML models)
+- **Google AI Studio / Gemini API** (LLM conversational agent)
+- **FastAPI** & **Ultralytics YOLO** (Computer Vision Backend)
+- **Google Maps Platform** (Maps JavaScript, Places (New), and Routes API)
+- **Google Antigravity Agent** (Agentic AI pair-programming assistant used to build this project!)
+
+---
+
+## 🛠️ How to Run Locally
+
+### Prerequisites
+- Node.js (v18+)
+- Python (3.9+)
+- Docker (optional, for local backend testing)
+
+### 1. Frontend Setup
 ```bash
+# Install dependencies
+npm install
+
+# Setup environment variables
+# Edit .env.local and add your Google APIs and YOLO backend URL
+# Example:
+# NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=AIzaSy...
+# GEMINI_API_KEY=AIzaSy...
+# NEXT_PUBLIC_YOLO_API_URL=https://your-cloud-run-url.app/predict
+
+# Run the development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. YOLO Backend Setup (FastAPI)
+```bash
+cd yolo-backend
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+# Install python dependencies
+pip install -r requirements.txt
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+# Run the API locally
+uvicorn main:app --host 0.0.0.0 --port 8080 --reload
+```
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+*Built with ❤️ for Google Juara Coding Vibes*
