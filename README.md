@@ -84,4 +84,4 @@ uvicorn main:app --host 0.0.0.0 --port 8080 --reload
 
 ---
 
-*Built with ❤️ for Google Juara Coding Vibes*
+*Built with ❤️ for Google Juara Vibes Coding Indonesia 2026*
