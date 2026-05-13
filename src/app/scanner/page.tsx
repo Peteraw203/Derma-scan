@@ -115,7 +115,7 @@ export default function ScannerScreen() {
         </div>
       </div>
 
-      <div className="flex-1 flex flex-col lg:flex-row gap-8 w-full max-w-7xl mx-auto relative z-10">
+      <div className="flex-1 flex flex-col lg:flex-row gap-8 w-full max-max-7xl mx-auto relative z-10">
         
         {/* Left Column: Drag & Drop / Camera Area */}
         <div className="flex-1 flex flex-col">
