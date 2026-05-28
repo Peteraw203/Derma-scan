@@ -9,6 +9,7 @@ import clsx from "clsx";
 
 export default function ScannerScreen() {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isScanning, setIsScanning] = useState(false);
   const [result, setResult] = useState<{ label: string; confidence: number } | null>(null);
   const [isDragging, setIsDragging] = useState(false);
@@ -38,6 +39,7 @@ export default function ScannerScreen() {
     if (file) {
       const imageUrl = URL.createObjectURL(file);
       setSelectedImage(imageUrl);
+      setSelectedFile(file);
       setResult(null);
       setIsCameraOpen(false);
     }
@@ -81,21 +83,82 @@ export default function ScannerScreen() {
         context.drawImage(video, 0, 0, canvas.width, canvas.height);
         const imageUrl = canvas.toDataURL("image/jpeg");
         setSelectedImage(imageUrl);
+        
+        // Convert to File object
+        const arr = imageUrl.split(',');
+        const mime = arr[0].match(/:(.*?);/)?.[1] || 'image/jpeg';
+        const bstr = atob(arr[1]);
+        let n = bstr.length;
+        const u8arr = new Uint8Array(n);
+        while (n--) {
+          u8arr[n] = bstr.charCodeAt(n);
+        }
+        const file = new File([u8arr], "camera_capture.jpg", { type: mime });
+        setSelectedFile(file);
+        
+        setResult(null);
         stopCamera();
       }
     }
   };
 
-  const runModel = () => {
-    if (!selectedImage) return;
+  const runModel = async () => {
+    if (!selectedFile) return;
     
     setIsScanning(true);
     
-    // Simulating YOLOv12 Inference delay
-    setTimeout(() => {
+    try {
+      const formData = new FormData();
+      formData.append("file", selectedFile);
+
+      const apiUrl = process.env.NEXT_PUBLIC_YOLO_API_URL || "https://yolo-scanner-api-693893513592.asia-southeast2.run.app/predict";
+
+      const response = await fetch(apiUrl, {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error(`Gagal menghubungi server (Status: ${response.status})`);
+      }
+
+      const data = await response.json();
+
+      if (data.error) {
+        throw new Error(data.error);
+      }
+
+      // Jika backend mengirimkan gambar dengan bounding box, tampilkan!
+      if (data.image_base64) {
+        setSelectedImage(data.image_base64);
+      }
+
+      const confidenceScore = data.confidence ? Math.round(data.confidence * 100) : 0;
+
+      let className = data.class;
+      // Memetakan angka/id class ke nama kelas yang sebenarnya
+      if (String(className) === "0") {
+        className = "Basal Cell Carcinoma";
+      } else if (String(className) === "1") {
+        className = "Melanoma";
+      } else if (String(className) === "2") {
+        className = "Squamous Cell Carcinoma";
+      } else if (typeof className === 'string') {
+        className = className.replace(/_/g, ' ');
+      }
+
+      setResult({
+        label: className,
+        confidence: confidenceScore
+      });
+
+    } catch (error: any) {
+      console.error("Scan error:", error);
+      alert(`Gagal memindai: ${error.message}`);
+      setResult(null);
+    } finally {
       setIsScanning(false);
-      setResult({ label: "Benign (Non-Cancerous)", confidence: 98.4 }); 
-    }, 2500);
+    }
   };
 
   return (
@@ -167,7 +230,7 @@ export default function ScannerScreen() {
                 )}
                 <div className="absolute bottom-6 left-0 right-0 flex justify-center gap-3">
                    <button 
-                     onClick={() => { setSelectedImage(null); setResult(null); }}
+                     onClick={() => { setSelectedImage(null); setSelectedFile(null); setResult(null); }}
                      className="bg-slate-900/50 dark:bg-black/50 backdrop-blur-md px-4 py-2 rounded-full text-xs font-medium border border-white/20 dark:border-white/10 text-white shadow-lg hover:bg-red-500/50 transition-colors"
                    >
                       Hapus Gambar
