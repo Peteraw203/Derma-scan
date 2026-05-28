@@ -106,65 +106,29 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Visit Other Projects by Peter */}
-        <div className="w-full flex flex-col gap-6">
-          <div className="flex items-center justify-between px-1">
-            <h3 className="text-xl md:text-2xl font-bold text-slate-800 dark:text-white tracking-tight">
-              Visit Other Projects by Peter
-            </h3>
+        {/* Subtle Footer */}
+        <div className="w-full text-center py-6 border-t border-slate-100 dark:border-slate-800/30 mt-8">
+          <p className="text-[10px] text-slate-400 dark:text-slate-500 font-medium tracking-wide">
+            made by{" "}
             <a 
               href="https://peterabednegowijaya.vercel.app" 
               target="_blank" 
-              rel="noopener noreferrer" 
-              className="text-sm font-bold text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 hover:underline flex items-center gap-1"
-            >
-              Portfolio <ArrowRight className="w-4 h-4" />
-            </a>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
-            <a 
-              href="https://peterabednegowijaya.vercel.app"
-              target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center p-5 md:p-6 bg-white dark:bg-slate-900 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.03)] hover:shadow-lg hover:border-emerald-100 dark:hover:border-emerald-500/30 transition-all cursor-pointer group"
+              className="text-slate-500 dark:text-slate-400 hover:text-emerald-500 dark:hover:text-emerald-400 transition-colors hover:underline"
             >
-              <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-slate-700 dark:text-slate-350 font-extrabold text-2xl md:text-3xl mr-5 group-hover:bg-emerald-50 dark:group-hover:bg-emerald-500/10 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors flex-shrink-0">
-                🚀
-              </div>
-              <div className="flex-1 overflow-hidden">
-                <h4 className="text-lg md:text-xl font-bold text-slate-800 dark:text-slate-100 truncate">Peter's Web Portfolio</h4>
-                <p className="text-sm text-slate-500 dark:text-slate-400 mb-1.5 font-medium line-clamp-2">
-                  Sleek and interactive digital space showcasing web apps, creative designs, and full-stack solutions.
-                </p>
-              </div>
-              <div className="px-5 py-2.5 md:py-3 md:px-6 bg-slate-50 dark:bg-slate-800 text-emerald-600 dark:text-emerald-400 font-bold text-sm md:text-base rounded-xl group-hover:bg-emerald-500 group-hover:text-white transition-colors border border-slate-100 dark:border-slate-700 group-hover:border-emerald-500 dark:group-hover:border-emerald-500 flex-shrink-0 ml-2">
-                Visit
-              </div>
-            </a>
-
+              peter
+            </a>{" "}
+            —{" "}
             <a 
-              href="https://peterabednegowijaya.vercel.app"
-              target="_blank"
+              href="https://peterabednegowijaya.vercel.app" 
+              target="_blank" 
               rel="noopener noreferrer"
-              className="flex items-center p-5 md:p-6 bg-white dark:bg-slate-900 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.03)] hover:shadow-lg hover:border-emerald-100 dark:hover:border-emerald-500/30 transition-all cursor-pointer group"
+              className="text-slate-500 dark:text-slate-400 hover:text-emerald-500 dark:hover:text-emerald-400 transition-colors hover:underline"
             >
-              <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-slate-700 dark:text-slate-350 font-extrabold text-2xl md:text-3xl mr-5 group-hover:bg-blue-50 dark:group-hover:bg-blue-500/10 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors flex-shrink-0">
-                💻
-              </div>
-              <div className="flex-1 overflow-hidden">
-                <h4 className="text-lg md:text-xl font-bold text-slate-800 dark:text-slate-100 truncate">Creative Lab & Code</h4>
-                <p className="text-sm text-slate-500 dark:text-slate-400 mb-1.5 font-medium line-clamp-2">
-                  Explore other high-performance platforms, IoT integrations, and experimental apps.
-                </p>
-              </div>
-              <div className="px-5 py-2.5 md:py-3 md:px-6 bg-slate-50 dark:bg-slate-800 text-emerald-600 dark:text-emerald-400 font-bold text-sm md:text-base rounded-xl group-hover:bg-emerald-500 group-hover:text-white transition-colors border border-slate-100 dark:border-slate-700 group-hover:border-emerald-500 dark:group-hover:border-emerald-500 flex-shrink-0 ml-2">
-                Explore
-              </div>
+              peterabednegowijaya.vercel.app
             </a>
-          </div>
+          </p>
         </div>
-
       </div>
     </div>
   );
