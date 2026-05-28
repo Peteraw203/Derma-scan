@@ -6,12 +6,14 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { APIProvider } from "@vis.gl/react-google-maps";
 import { useTheme } from "next-themes";
+import { useAuth } from "@/context/AuthContext";
 
 export default function LayoutWrapper({ children }: { children: React.ReactNode }) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const pathname = usePathname();
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
+  const { user } = useAuth();
 
   useEffect(() => {
     setMounted(true);
@@ -22,9 +24,10 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
   const navItems = [
     { name: "Overview", href: "/", icon: Home },
     { name: "Scan Kulit", href: "/scanner", icon: Microscope },
-    { name: "Konsultasi AI", href: "/chat-ai", icon: MessageSquare },
     { name: "Sensor Warna", href: "/iot", icon: Cpu },
+    { name: "Konsultasi AI", href: "/chat-ai", icon: MessageSquare },
     { name: "Klinik Terdekat", href: "/maps", icon: MapPin },
+    { name: "Riwayat & Profil", href: "/profile", icon: User },
   ];
 
   return (
@@ -101,15 +104,22 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
               </button>
             )}
             
-            <div className="flex items-center gap-3 bg-white dark:bg-slate-800 p-3 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm cursor-pointer hover:border-emerald-200 dark:hover:border-emerald-500/50 hover:shadow-md transition-all">
+            <Link 
+              href={user ? "/profile" : "/login"}
+              className="flex items-center gap-3 bg-white dark:bg-slate-800 p-3 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm cursor-pointer hover:border-emerald-200 dark:hover:border-emerald-500/50 hover:shadow-md transition-all text-left"
+            >
               <div className="w-10 h-10 rounded-full bg-emerald-100 dark:bg-emerald-500/20 flex items-center justify-center text-emerald-700 dark:text-emerald-400 font-bold border-2 border-white dark:border-slate-800 shadow-sm flex-shrink-0">
-                U
+                {user ? (user.displayName?.[0] || user.email?.[0] || "U").toUpperCase() : "G"}
               </div>
               <div className="flex flex-col flex-1 overflow-hidden">
-                <span className="text-sm font-bold text-slate-800 dark:text-slate-100 truncate">User Name</span>
-                <span className="text-[11px] text-slate-500 dark:text-slate-400 font-medium truncate">Free Plan</span>
+                <span className="text-sm font-bold text-slate-800 dark:text-slate-100 truncate">
+                  {user ? (user.displayName || user.email?.split("@")[0] || "User") : "Guest"}
+                </span>
+                <span className="text-[11px] text-slate-500 dark:text-slate-400 font-medium truncate">
+                  {user ? user.email : "Klik untuk Masuk"}
+                </span>
               </div>
-            </div>
+            </Link>
           </div>
         </aside>
 

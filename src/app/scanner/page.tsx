@@ -1,11 +1,13 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { ArrowLeft, Image as ImageIcon, UploadCloud, RefreshCw, Zap, ShieldAlert, CheckCircle2, Activity, Camera, X } from "lucide-react";
+import { ArrowLeft, Image as ImageIcon, UploadCloud, RefreshCw, Zap, ShieldAlert, CheckCircle2, Activity, Camera, X, MessageSquare, Sparkles } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import clsx from "clsx";
+import { db, auth } from "@/lib/firebase";
+import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 
 export default function ScannerScreen() {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
@@ -15,9 +17,22 @@ export default function ScannerScreen() {
   const [isDragging, setIsDragging] = useState(false);
   const [isCameraOpen, setIsCameraOpen] = useState(false);
   
+  const [iotData, setIotData] = useState<{ distance: number; status: string; baseline: string; target: string } | null>(null);
+
   const fileInputRef = useRef<HTMLInputElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    const cached = localStorage.getItem("derma_iot_result");
+    if (cached) {
+      try {
+        setIotData(JSON.parse(cached));
+      } catch (e) {
+        console.error(e);
+      }
+    }
+  }, []);
 
   useEffect(() => {
     return () => {
@@ -147,10 +162,25 @@ export default function ScannerScreen() {
         className = className.replace(/_/g, ' ');
       }
 
-      setResult({
+      const newResult = {
         label: className,
         confidence: confidenceScore
-      });
+      };
+      setResult(newResult);
+      localStorage.setItem("derma_scan_result", JSON.stringify(newResult));
+
+      if (auth.currentUser) {
+        try {
+          await addDoc(collection(db, "users", auth.currentUser.uid, "history"), {
+            type: "scanner",
+            label: className,
+            confidence: confidenceScore,
+            timestamp: serverTimestamp()
+          });
+        } catch (dbErr) {
+          console.error("Gagal menyimpan riwayat ke Firestore:", dbErr);
+        }
+      }
 
     } catch (error: any) {
       console.error("Scan error:", error);
@@ -229,12 +259,17 @@ export default function ScannerScreen() {
                   </motion.div>
                 )}
                 <div className="absolute bottom-6 left-0 right-0 flex justify-center gap-3">
-                   <button 
-                     onClick={() => { setSelectedImage(null); setSelectedFile(null); setResult(null); }}
-                     className="bg-slate-900/50 dark:bg-black/50 backdrop-blur-md px-4 py-2 rounded-full text-xs font-medium border border-white/20 dark:border-white/10 text-white shadow-lg hover:bg-red-500/50 transition-colors"
-                   >
-                      Hapus Gambar
-                   </button>
+                    <button 
+                      onClick={() => { 
+                        setSelectedImage(null); 
+                        setSelectedFile(null); 
+                        setResult(null); 
+                        localStorage.removeItem("derma_scan_result");
+                      }}
+                      className="bg-slate-900/50 dark:bg-black/50 backdrop-blur-md px-4 py-2 rounded-full text-xs font-medium border border-white/20 dark:border-white/10 text-white shadow-lg hover:bg-red-500/50 transition-colors"
+                    >
+                       Hapus Gambar
+                    </button>
                    <button 
                      onClick={() => fileInputRef.current?.click()}
                      className="bg-slate-900/50 dark:bg-black/50 backdrop-blur-md px-4 py-2 rounded-full text-xs font-medium border border-white/20 dark:border-white/10 text-white shadow-lg hover:bg-emerald-500/50 transition-colors"
@@ -340,6 +375,30 @@ export default function ScannerScreen() {
                         />
                       </div>
                     </div>
+                    
+                    {iotData ? (
+                      <div className="flex flex-col gap-2.5 w-full mt-5">
+                        <Link 
+                          href={`/chat-ai?source=combined&label=${encodeURIComponent(result.label)}&confidence=${result.confidence}&distance=${iotData.distance}&status=${iotData.status}&baseline=${encodeURIComponent(iotData.baseline)}&target=${encodeURIComponent(iotData.target)}`}
+                          className="w-full bg-gradient-to-r from-indigo-600 to-violet-600 dark:from-indigo-500 dark:to-violet-500 text-white font-bold py-3.5 px-4 rounded-2xl flex items-center justify-center gap-2 hover:from-indigo-700 hover:to-violet-700 hover:scale-[1.01] active:scale-[0.99] transition-all text-sm shadow-md shadow-indigo-500/20"
+                        >
+                          <Sparkles className="w-4 h-4 text-amber-300 animate-pulse" /> Konsultasikan Hasil Gabungan (Scan + Warna)
+                        </Link>
+                        <Link 
+                          href={`/chat-ai?source=scanner&label=${encodeURIComponent(result.label)}&confidence=${result.confidence}`}
+                          className="w-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 font-bold py-3.5 px-4 rounded-2xl flex items-center justify-center gap-2 hover:bg-slate-200 dark:hover:bg-slate-700 hover:scale-[1.01] active:scale-[0.99] transition-all text-sm border border-slate-200 dark:border-slate-700"
+                        >
+                          <MessageSquare className="w-4 h-4" /> Konsultasikan Hasil Scan Saja
+                        </Link>
+                      </div>
+                    ) : (
+                      <Link 
+                        href={`/chat-ai?source=scanner&label=${encodeURIComponent(result.label)}&confidence=${result.confidence}`}
+                        className="w-full mt-5 bg-indigo-600 dark:bg-indigo-500 text-white font-bold py-3.5 px-4 rounded-2xl flex items-center justify-center gap-2 hover:bg-indigo-700 dark:hover:bg-indigo-600 hover:scale-[1.01] active:scale-[0.99] transition-all text-sm shadow-md shadow-indigo-500/10 dark:shadow-none"
+                      >
+                        <MessageSquare className="w-4 h-4" /> Konsultasikan Hasil dengan AI
+                      </Link>
+                    )}
                   </motion.div>
                 )}
               </AnimatePresence>
