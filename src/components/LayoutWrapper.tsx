@@ -19,7 +19,7 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
     setMounted(true);
   }, []);
   
-  const googleMapsApiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "";
+  const googleMapsApiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "AIzaSyAFvzwKKz2sHK84p_7qrYMA3MA0wbhYBaE";
 
   const navItems = [
     { name: "Overview", href: "/", icon: Home },
