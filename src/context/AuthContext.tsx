@@ -21,6 +21,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (!auth || typeof auth.onIdTokenChanged !== "function") {
+      console.warn("Firebase Auth is not initialized. Running in guest-only mode.");
+      setLoading(false);
+      return;
+    }
     const unsubscribe = onAuthStateChanged(auth, (usr) => {
       setUser(usr);
       setLoading(false);
@@ -29,7 +34,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const logout = async () => {
-    await signOut(auth);
+    if (auth && typeof auth.onIdTokenChanged === "function") {
+      await signOut(auth);
+    }
   };
 
   return (

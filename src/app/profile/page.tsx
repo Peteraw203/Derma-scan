@@ -43,6 +43,13 @@ export default function ProfileScreen() {
     if (!user) return;
     setIsHistoryOpen(true);
     setIsFetchingHistory(true);
+
+    if (!db || typeof db.type !== "string") {
+      console.warn("Firestore database is not initialized.");
+      setIsFetchingHistory(false);
+      return;
+    }
+
     try {
       const q = query(
         collection(db, "users", user.uid, "history"),

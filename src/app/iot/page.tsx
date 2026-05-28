@@ -243,7 +243,7 @@ export default function IotScreen() {
       };
       localStorage.setItem("derma_iot_result", JSON.stringify(iotResult));
 
-      if (auth.currentUser) {
+      if (auth.currentUser && db && typeof db.type === "string") {
         addDoc(collection(db, "users", auth.currentUser.uid, "history"), {
           type: "iot",
           distance,

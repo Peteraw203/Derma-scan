@@ -169,7 +169,7 @@ export default function ScannerScreen() {
       setResult(newResult);
       localStorage.setItem("derma_scan_result", JSON.stringify(newResult));
 
-      if (auth.currentUser) {
+      if (auth.currentUser && db && typeof db.type === "string") {
         try {
           await addDoc(collection(db, "users", auth.currentUser.uid, "history"), {
             type: "scanner",
