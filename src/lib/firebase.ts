@@ -3,17 +3,22 @@ import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY || "AIzaSyCxvipdwyMaKweaT2KqE5mIIYbnw-f3EJE",
-  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN || "derma-scan-59f3.firebaseapp.com",
-  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || "derma-scan-59f3",
-  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET || "derma-scan-59f3.firebasestorage.app",
-  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID || "878884230254",
-  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID || "1:878884230254:web:3f13be60dbb3ec13b8427f",
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
 
-// Initialize Firebase for SSR compatibility
-const app = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
+// Prevent build-time crashes when environment variables are missing (e.g. in Cloud Build)
+const hasConfig = !!firebaseConfig.apiKey;
+
+const app = getApps().length > 0 
+  ? getApp() 
+  : (hasConfig ? initializeApp(firebaseConfig) : null);
+
+const auth = app ? getAuth(app) : {} as any;
+const db = app ? getFirestore(app) : {} as any;
 
 export { app, auth, db };
