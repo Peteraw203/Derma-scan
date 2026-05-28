@@ -36,7 +36,7 @@ function RoutePath({ origin, destination, onResponse }: {
 
     if (polyline) polyline.setMap(null);
 
-    const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "";
+    const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "AIzaSyAFvzwKKz2sHK84p_7qrYMA3MA0wbhYBaE";
     if (!apiKey) return;
 
     const requestBody = {
@@ -119,7 +119,7 @@ export default function MapsScreen() {
 
   const selectedClinic = clinics.find(c => c.place_id === selectedClinicId);
 
-  const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "";
+  const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "AIzaSyAFvzwKKz2sHK84p_7qrYMA3MA0wbhYBaE";
   const apiKeyMissing = !apiKey || apiKey === "your_google_maps_api_key_here";
 
   // Function to search for nearby clinics using Places API (New)
